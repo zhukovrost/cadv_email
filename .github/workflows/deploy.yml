@@ -20,5 +20,5 @@ jobs:
 
       - name: Build&Push Docker file
         run: |
-          docker build -t cashadvisorbeta/cadv_email:latest .
+          docker build -f build/dockerfile -t cashadvisorbeta/cadv_email:latest .
           docker push cashadvisorbeta/cadv_email:latest
