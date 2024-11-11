@@ -42,5 +42,12 @@ func loadConfig(filename string, cfg *Config) error {
 }
 
 func processEnvironment(cfg *Config) error {
+	if user, exists := os.LookupEnv("SMTP_USER"); exists {
+		cfg.SMTP.Username = user
+		cfg.SMTP.Sender = user
+	}
+	if password, exists := os.LookupEnv("SMTP_PASSWORD"); exists {
+		cfg.SMTP.Password = password
+	}
 	return nil
 }

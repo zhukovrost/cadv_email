@@ -19,7 +19,7 @@ type Config struct {
 	Host     string `yaml:"host"`
 	Port     int    `yaml:"port"`
 	Username string `yaml:"user"`
-	Password string `yaml:"password" envconfig:"SMTP_PASSWORD"`
+	Password string `yaml:"password"`
 	Sender   string `yaml:"sender"`
 }
 

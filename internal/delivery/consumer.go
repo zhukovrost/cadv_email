@@ -30,7 +30,7 @@ type Config struct {
 	ConsumerTag  string `yaml:"consumer_tag"`
 }
 
-func NewConsumer(cfg Config, emailService service.Mailer, logger *zap.Logger) (*Consumer, error) {
+func New(cfg Config, emailService service.Mailer, logger *zap.Logger) (*Consumer, error) {
 	c := &Consumer{
 		Config:       cfg,
 		l:            logger,
@@ -113,11 +113,19 @@ func (c *Consumer) Run() {
 		c.l.Fatal("queue Consume error", zap.Error(err))
 	}
 
-	go c.Handle(deliveries, c.done)
+	go c.handle(deliveries, c.done)
 	c.SetupCloseHandler()
+
+	<-c.done
+
+	c.l.Info("shutting down")
+
+	if err := c.Shutdown(); err != nil {
+		c.l.Fatal("error during shutdown", zap.Error(err))
+	}
 }
 
-func (c *Consumer) Handle(deliveries <-chan amqp.Delivery, done chan error) {
+func (c *Consumer) handle(deliveries <-chan amqp.Delivery, done chan error) {
 	cleanup := func() {
 		c.l.Info("handle: deliveries channel closed")
 		close(done)

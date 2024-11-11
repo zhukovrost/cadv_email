@@ -15,9 +15,10 @@ func Run(cfg *config.Config) {
 	emailService := service.New(l, cfg.SMTP)
 
 	l.Info("Starting RabbitMQ")
-	consumer, err := delivery.NewConsumer(cfg.RabbitMQ, emailService, l)
+	consumer, err := delivery.New(cfg.RabbitMQ, emailService, l)
 	if err != nil {
 		l.Fatal("Error starting RabbitMQ consumer", zap.Error(err))
 	}
+	l.Info("Running RabbitMQ consumer")
 	consumer.Run()
 }

@@ -1,7 +1,7 @@
 smtp:
   host: smtp.mail.ru
   port: 465
-  user: <user>
+  user: cadv
   password: <password>
   sender: <user>
 rabbitmq:
